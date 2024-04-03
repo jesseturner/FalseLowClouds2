@@ -1,38 +1,12 @@
-import os
 import numpy as np
 import xarray as xr
 import matplotlib.pyplot as plt
-import cartopy.crs as ccrs
+#import cartopy.crs as ccrs
 import cartopy.feature as cfeature
+from Download_Model_Data import download_data
 
-# Function to download data
-# this was written for MacOS, likely won't work on other operating systems
-def download_data(date, dtime):
-    directory = f"data/{date}/time_{dtime}/"
-    sst_file = f"{directory}/oisst-avhrr-v02r01.{date}.nc"
-    gfs_file = f"{directory}/gfs.t{dtime}.pgrb2.0p25.f000"
-
-    if os.path.isfile(sst_file) and os.path.isfile(gfs_file):
-        print("Files exist")
-        return
-    
-    if not os.path.exists(directory):
-        print("Making new directories")
-        os.makedirs(directory)
-    else:
-        print("Directory exists but some files are missing")
-        
-    sst_url = f"https://www.ncei.noaa.gov/thredds/fileServer/OisstBase/NetCDF/V2.1/AVHRR/{date[:6]}/oisst-avhrr-v02r01.{date}.nc"
-    sst_backup_url = f"https://www.ncei.noaa.gov/thredds/fileServer/OisstBase/NetCDF/V2.1/AVHRR/{date[:6]}/oisst-avhrr-v02r01.{date}_preliminary.nc"
-    os.system(f"curl -o {directory}/oisst-avhrr-v02r01.{date}.nc {sst_url} || curl -o {directory}/oisst-avhrr-v02r01.{date}_preliminary.nc {sst_backup_url}")
-        
-    gfs_url = f"https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.{date}/{dtime[:2]}/atmos/gfs.t{dtime}.pgrb2.0p25.f000"
-    os.system(f"curl -o {directory}/gfs.t{dtime}.pgrb2.0p25.f000 {gfs_url}")
-    
-    return
-
-# Function to process NLCT data
-def process_nlct_data(date, dtime):
+# Function to create BTD
+def create_btd(date, dtime):
     data_root = f"data/{date}/time_{dtime}/"
     gfs_file = f"gfs.t{dtime}.pgrb2.0p25.f000"
     sst_file = f"oisst-avhrr-v02r01.{date}.nc"
@@ -56,8 +30,8 @@ def process_nlct_data(date, dtime):
 
 # Function to visualize NLCT data
 def visualize_nlct(lon, lat, btd, date, dtime):
-    projection = ccrs.PlateCarree()
-    fig, ax = plt.subplots(1, figsize=(12, 12), subplot_kw={'projection': projection})
+    #projection = ccrs.PlateCarree()
+    fig, ax = plt.subplots(1, figsize=(12, 12))#, subplot_kw={'projection': projection})
     cmap = plt.cm.PuBu
     levels = np.linspace(-7, 7, 31)
     c = ax.contourf(lon, lat, btd, cmap=cmap, extend='both', levels=levels)
@@ -66,15 +40,15 @@ def visualize_nlct(lon, lat, btd, date, dtime):
     clb.set_label('Brightness Temperature Difference (K)')
     ax.add_feature(cfeature.LAND, zorder=100, color='black', edgecolor='k')
     ax.coastlines(resolution='50m', color='black', linewidth=1)
-    plt.show()
+    fig.show()
 
 # Main function
 def main():
-    dates = ["20230919", "20230920", "20230921"]
+    dates = ["20230919"]
     dtime = "06z"
     for date in dates:
         download_data(date, dtime)
-        lon, lat, btd = process_nlct_data(date, dtime)
+        lon, lat, btd = create_btd(date, dtime)
         visualize_nlct(lon, lat, btd, date, dtime)
 
 if __name__ == "__main__":
