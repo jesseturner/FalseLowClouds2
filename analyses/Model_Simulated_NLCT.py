@@ -1,7 +1,7 @@
 import numpy as np
 import xarray as xr
 import matplotlib.pyplot as plt
-#import cartopy.crs as ccrs
+import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 from Download_Model_Data import download_data
 
@@ -30,8 +30,8 @@ def create_btd(date, dtime):
 
 # Function to visualize NLCT data
 def visualize_nlct(lon, lat, btd, date, dtime):
-    #projection = ccrs.PlateCarree()
-    fig, ax = plt.subplots(1, figsize=(12, 12))#, subplot_kw={'projection': projection})
+    projection = ccrs.PlateCarree()
+    fig, ax = plt.subplots(1, figsize=(12, 12), subplot_kw={'projection': projection})
     cmap = plt.cm.PuBu
     levels = np.linspace(-7, 7, 31)
     c = ax.contourf(lon, lat, btd, cmap=cmap, extend='both', levels=levels)
