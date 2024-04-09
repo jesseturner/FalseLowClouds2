@@ -19,14 +19,17 @@ def visualize_nlct(lon, lat, btd, date, dtime):
     ax.coastlines(resolution='50m', color='black', linewidth=1)
     fig.show()
 
-# Main function
-def main():
-    dates = ["20230919"]
-    dtime = "06z"
-    for date in dates:
-        download_data(date, dtime)
-        lon, lat, btd = create_btd(date, dtime)
-        visualize_nlct(lon, lat, btd, date, dtime)
 
-if __name__ == "__main__":
-    main()
+# General mapping function
+def map_data(lon, lat, data, levels, title, clb_label):
+    projection = ccrs.PlateCarree()
+    fig, ax = plt.subplots(1, figsize=(12, 12), subplot_kw={'projection': projection})
+    cmap = plt.cm.PuBu
+    c = ax.contourf(lon, lat, data, cmap=cmap, extend='both', levels=levels)
+    clb = plt.colorbar(c, shrink=0.3, pad=0.02, ax=ax)
+    ax.set_title(title)
+    clb.set_label(clb_label)
+    ax.add_feature(cfeature.LAND, zorder=100, color='black', edgecolor='k')
+    ax.coastlines(resolution='50m', color='black', linewidth=1)
+    fig.show()
+
