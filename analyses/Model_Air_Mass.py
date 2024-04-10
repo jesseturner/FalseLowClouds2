@@ -3,7 +3,7 @@ import xarray as xr
 import numpy as np
 
 #%%
-date = "20230919"
+date = "20230920"
 dtime = "06z"
 min_lon, min_lat, max_lon, max_lat = -77, 33, -50, 45
 
@@ -16,15 +16,36 @@ gfs_ds = gfs_ds.sel(latitude=slice(max_lat,min_lat), longitude=slice(min_lon+360
 gfs_ds
 
 #%%
-from Visualize import map_data
-
 lon = gfs_ds.longitude
 lat = gfs_ds.latitude
 
-data = gfs_ds['q'].sum(dim='isobaricInhPa')
-levels = np.linspace(np.nanmin(data), np.nanmax(data), 31)
+humidity = gfs_ds['q'].sum(dim='isobaricInhPa')
+humidity_levels = np.linspace(np.nanmin(humidity), np.nanmax(humidity), 31)
 
-title = "Humidity Summed for " +date+ " " +dtime
-clb_label = "Units"
+temp_surf = gfs_ds['t'].isel(isobaricInhPa=0)
 
-map_data(lon, lat, data, levels, title, clb_label)
+title = "GFS Model " +date+ " " +dtime
+clb_label = "Specific Humidity (kg/kg)"
+
+# %%
+import matplotlib.pyplot as plt
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
+
+# %%
+projection = ccrs.PlateCarree()
+fig, ax = plt.subplots(1, figsize=(12, 12), subplot_kw={'projection': projection})
+cmap = plt.cm.PuBu
+q = ax.contourf(lon, lat, humidity, cmap=cmap, extend='both', levels=humidity_levels)
+clb = plt.colorbar(q, shrink=0.3, pad=0.02, ax=ax)
+
+t = ax.contour(lon, lat, temp_surf, cmap=plt.cm.coolwarm)
+plt.clabel(t, inline=True, fontsize=8)
+
+ax.set_title(title)
+clb.set_label(clb_label)
+ax.add_feature(cfeature.LAND, zorder=100, color='black', edgecolor='k')
+ax.coastlines(resolution='50m', color='black', linewidth=1)
+fig.savefig('../figures/gfs_'+date+'.png', dpi = 300, bbox_inches='tight')
+fig.show()
+# %%
