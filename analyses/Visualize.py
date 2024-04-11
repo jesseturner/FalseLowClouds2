@@ -2,8 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
-from Download_Model_Data import download_data
-from Model_Simulated_BTD import create_btd
 
 # Function to visualize NLCT data
 def visualize_nlct(lon, lat, btd, date, dtime):

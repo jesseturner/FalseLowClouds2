@@ -3,7 +3,7 @@ import os
 # Function to download data
 # this was written for MacOS, likely won't work on other operating systems
 def download_data(date, dtime):
-    directory = f"data/{date}/time_{dtime}/"
+    directory = f"data/{date}/"
     sst_file = f"{directory}/oisst-avhrr-v02r01.{date}.nc"
     gfs_file = f"{directory}/gfs.t{dtime}.pgrb2.0p25.f000"
 

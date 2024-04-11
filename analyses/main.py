@@ -1,6 +1,4 @@
 from Download_Model_Data import download_data
-from Model_Simulated_BTD import create_btd
-from Visualize import visualize_nlct
 
 # Main function
 def main():
