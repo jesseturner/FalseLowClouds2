@@ -3,7 +3,7 @@ import xarray as xr
 import numpy as np
 
 #%%
-date = "20230918"
+date = "20230919"
 dtime = "06z"
 min_lon, min_lat, max_lon, max_lat = -77, 33, -50, 45
 
@@ -91,6 +91,7 @@ ax_hum = ax_temp.twiny()  # Create a twin axes sharing the same y-axis
 ax_temp.plot(s_p_profile['t'].values, s_p_profile['isobaricInhPa'].values, c="red", linewidth=3, label='Temperature')
 ax_temp.set_xlabel('Temperature (°C)')
 ax_temp.set_ylabel('Pressure Height')
+ax_temp.invert_yaxis()
 
 # Plot humidity profile
 ax_hum.plot(s_p_profile['q'].values, s_p_profile['isobaricInhPa'].values, c="blue", linewidth=3, label='Humidity')
