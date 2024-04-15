@@ -3,7 +3,7 @@ import xarray as xr
 import numpy as np
 
 #%%
-date = "20230919"
+date = "20230918"
 dtime = "06z"
 min_lon, min_lat, max_lon, max_lat = -77, 33, -50, 45
 
@@ -49,7 +49,7 @@ ax.set_title(title)
 clb.set_label(clb_label)
 ax.add_feature(cfeature.LAND, zorder=100, color='black', edgecolor='k')
 ax.coastlines(resolution='50m', color='black', linewidth=1)
-fig.savefig('../figures/gfs_'+date+'.png', dpi = 300, bbox_inches='tight')
+#fig.savefig('../figures/gfs_'+date+'.png', dpi = 300, bbox_inches='tight')
 fig.show()
 
 # %%
@@ -97,9 +97,17 @@ ax_temp.invert_yaxis()
 ax_hum.plot(s_p_profile['q'].values, s_p_profile['isobaricInhPa'].values, c="blue", linewidth=3, label='Humidity')
 ax_hum.set_xlabel('Specific Humidity (kg/kg)')
 
+# Set y-axis
+ax_temp.set_yscale('log')
+ax_temp.set_ylim(1000, 100)
+ax_temp.set_yticks([1000, 800, 600, 400, 200])
+ax_temp.set_yticklabels(['1000', '800', '600', '400', '200'])
+ax_temp.yaxis.set_minor_formatter(plt.NullFormatter())
+
 # Set title and grid
-ax_temp.set_title('Atmospheric Profile')
+ax_temp.set_title("Atmospheric Profile (" +date+ " " +dtime+")")
 ax_temp.grid(True)
-ax_temp.legend()
+ax_temp.legend(bbox_to_anchor=(0.5, 0., 0.5, 0.95))
+ax_hum.legend(bbox_to_anchor=(0.5, 0., 0.5, 0.88))
 plt.show()
 # %%
