@@ -177,7 +177,7 @@ levels = np.linspace(0, np.max(static_features), 21)
 
 c=ax.contourf(BTDs[0].lon, BTDs[0].lat, static_features, cmap=cmap, extend='both', levels=levels)
 clb=plt.colorbar(c, shrink=0.3, pad=0.02, ax=ax)
-ax.set_title('11um - 3.9um BTD \n ('+date_str_start +' to '+date_str_end + ', ' + time_str+' UTC)', fontsize=18)
+ax.set_title('Summed positive 11um - 3.9um BTD \n ('+date_str_start +' to '+date_str_end + ', ' + time_str+' UTC)', fontsize=18)
 clb.set_label('BTD (K)')
 
 ax.add_feature(cfeature.STATES)
