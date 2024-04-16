@@ -29,7 +29,7 @@ year = 2023
 month = 9
 month_name = 'Sep'
 day_start = 7
-day_end = 9
+day_end = 14
 hour = 6
 # %%
 #---Getting GOES-16 radiance data:
@@ -156,9 +156,9 @@ for i in range(len(b07_data)):
 static_features = 0
 sum_BTD = 0
 for i in range(len(BTDs)):
-    BTD_positive = BTDs[i][BTDs[i] < 0] = 0
-    sum_BTD += BTD_positive
-    static_features = (sum_BTD/len(BTDs))[0]
+    BTD_positive = BTDs[i].where(BTDs[i]>0,0)
+    sum_BTD += BTD_positive[0]
+    static_features = (sum_BTD/len(BTDs))
 np.shape(static_features)
 
 # %%
