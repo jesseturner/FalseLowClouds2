@@ -25,10 +25,10 @@ import satellite_data_functions
 fs = s3fs.S3FileSystem(anon=True)
 # %%
 #---Set the datetime range of interest:
-year = 2023
+year = 2022
 month = 9
 month_name = 'Sep'
-day_start = 7
+day_start = 14
 day_end = 14
 hour = 6
 # %%
