@@ -105,7 +105,7 @@ filename = b07_data[date_index].split('/')[-1]
 # %%
 BTD = satellite_data_functions.create_BTD(ds_07, ds_14, filename, datetime, lats, lons)
 # %%
-dt = BTDs[0][0].time.values
+dt = BTD.time.values[0]
 date_str = np.datetime_as_string(dt)[:10]
 time_str = np.datetime_as_string(dt)[11:16]
 
@@ -113,9 +113,9 @@ time_str = np.datetime_as_string(dt)[11:16]
 projection=ccrs.PlateCarree()
 fig,ax=plt.subplots(1, figsize=(12,12),subplot_kw={'projection': projection})
 cmap = plt.cm.Greys
-levels = np.linspace(0, 3, 21)
+levels = np.linspace(0, 3, 31)
 
-c=ax.contourf(BTDs[0][0].lon, BTDs[0][0].lat, BTDs[0][0], cmap=cmap, extend='both', levels=levels)
+c=ax.contourf(BTD.lon, BTD.lat, BTD[0], cmap=cmap, extend='both', levels=levels)
 clb = plt.colorbar(c, shrink=0.6, pad=0.02, ax=ax)
 clb.ax.tick_params(labelsize=15)
 clb.set_label('BTD (K)', fontsize=15)
