@@ -25,11 +25,11 @@ import satellite_data_functions
 fs = s3fs.S3FileSystem(anon=True)
 # %%
 #---Set the datetime range of interest:
-year = 2022
-month = 9
-month_name = 'Sep'
-day_start = 14
-day_end = 14
+year = 2023
+month = 7
+month_name = 'Jul'
+day_start = 1
+day_end = 2
 hour = 6
 # %%
 #---Getting GOES-16 radiance data:
@@ -105,20 +105,21 @@ filename = b07_data[date_index].split('/')[-1]
 # %%
 BTD = satellite_data_functions.create_BTD(ds_07, ds_14, filename, datetime, lats, lons)
 # %%
-dt = BTD.time.values[0]
+dt = BTDs[0][0].time.values
 date_str = np.datetime_as_string(dt)[:10]
 time_str = np.datetime_as_string(dt)[11:16]
 
 
 projection=ccrs.PlateCarree()
 fig,ax=plt.subplots(1, figsize=(12,12),subplot_kw={'projection': projection})
-cmap = plt.cm.Spectral_r
-levels = np.linspace(0, np.max(BTD), 21)
+cmap = plt.cm.Greys
+levels = np.linspace(0, 3, 21)
 
-c=ax.contourf(BTD.lon, BTD.lat, BTD[0], cmap=cmap, extend='both', levels=levels)
-clb=plt.colorbar(c, shrink=0.3, pad=0.02, ax=ax)
-ax.set_title('11um - 3.9um BTD ('+date_str +' '+time_str+' UTC)', fontsize=18)
-clb.set_label('BTD (K)')
+c=ax.contourf(BTDs[0][0].lon, BTDs[0][0].lat, BTDs[0][0], cmap=cmap, extend='both', levels=levels)
+clb = plt.colorbar(c, shrink=0.6, pad=0.02, ax=ax)
+clb.ax.tick_params(labelsize=15)
+clb.set_label('BTD (K)', fontsize=15)
+ax.set_title('11um - 3.9um BTD ('+date_str +' '+time_str+' UTC)', fontsize=20)
 
 ax.add_feature(cfeature.STATES)
 ax.add_feature(cfeature.BORDERS)
@@ -172,13 +173,14 @@ time_str = np.datetime_as_string(dt_start)[11:16]
 
 projection=ccrs.PlateCarree()
 fig,ax=plt.subplots(1, figsize=(12,12),subplot_kw={'projection': projection})
-cmap = plt.cm.Spectral_r
-levels = np.linspace(0, np.max(static_features), 21)
+cmap = plt.cm.Greys
+levels = np.linspace(0, 3, 31)
 
 c=ax.contourf(BTDs[0].lon, BTDs[0].lat, static_features, cmap=cmap, extend='both', levels=levels)
-clb=plt.colorbar(c, shrink=0.3, pad=0.02, ax=ax)
-ax.set_title('Summed positive 11um - 3.9um BTD \n ('+date_str_start +' to '+date_str_end + ', ' + time_str+' UTC)', fontsize=18)
-clb.set_label('BTD (K)')
+clb = plt.colorbar(c, shrink=0.6, pad=0.02, ax=ax)
+clb.ax.tick_params(labelsize=15)
+clb.set_label('BTD (K)', fontsize=15)
+ax.set_title('Average 11um - 3.9um BTD \n ('+date_str_start +' to '+date_str_end + ', ' + time_str+' UTC)', fontsize=20)
 
 ax.add_feature(cfeature.STATES)
 ax.add_feature(cfeature.BORDERS)
